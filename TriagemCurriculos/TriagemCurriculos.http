@@ -1,0 +1,6 @@
+@TriagemCurriculos_HostAddress = http://localhost:5075
+
+GET {{TriagemCurriculos_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
