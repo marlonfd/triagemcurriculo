@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TriagemCurriculos.Domain.Entites;
 
@@ -30,7 +30,7 @@ namespace TriagemCurriculos.Infraestructure.Configuration
             // Mapeamento do campo JSON string do banco
             builder.Property(c => c.ExtractedSkillsJson)
                 .HasColumnName("extracted_skills")
-                .HasColumnType("jsonb"); // Altere para "json" se estiver usando MySQL
+                .HasColumnType("json"); // MySQL 8.4
 
             builder.Property(c => c.AiMatchScore).HasColumnName("ai_match_score");
             builder.Property(c => c.AiAnalysisSummary).HasColumnName("ai_analysis_summary").HasColumnType("text");
@@ -52,16 +52,15 @@ namespace TriagemCurriculos.Infraestructure.Configuration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(c => c.StatusType)
-                .WithMany() // SystemType não precisa ter uma lista de candidatos nele (SRP)
+                .WithMany() 
                 .HasForeignKey(c => c.StatusTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Índice composto essencial para performance do isolamento solicitado no SQL
             builder.HasIndex(c => new { c.TenantId, c.JobPositionId, c.AiMatchScore })
                 .HasDatabaseName("idx_tenant_candidate_search");
 
             // Filtro global de Multi-tenancy
-            //builder.HasQueryFilter(c => c.TenantId == _tenantId);
+            builder.HasQueryFilter(c => c.TenantId == _tenantId);
         }
     }
 }

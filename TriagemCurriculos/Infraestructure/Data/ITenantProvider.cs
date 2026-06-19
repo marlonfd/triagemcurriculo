@@ -4,11 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using TriagemCurriculos.Domain.Entites;
     using TriagemCurriculos.Infraestructure.Configuration;
-
-    public interface ITenantProvider
-    {
-        string GetTenantId();
-    }
+    using TriagemCurriculos.Infraestructure.Interface;
 
     public class ApplicationDbContext : DbContext
     {
@@ -28,8 +24,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Aplica as configurações passando o Tenant atual para as tabelas que precisam de isolamento
+            
             modelBuilder.ApplyConfiguration(new TenantConfiguration());
             modelBuilder.ApplyConfiguration(new SystemTypeConfiguration());
             modelBuilder.ApplyConfiguration(new JobPositionConfiguration(_currentTenantId));

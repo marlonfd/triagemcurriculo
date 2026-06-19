@@ -1,4 +1,4 @@
-﻿using TriagemCurriculos.Repositories;
+using TriagemCurriculos.Repositories;
 using TriagemCurriculos.Repositories.Interface;
 
 namespace TriagemCurriculos.Infraestructure
@@ -11,6 +11,7 @@ namespace TriagemCurriculos.Infraestructure
             services.AddScoped<IJobPositionRepository, JobPositionRepository>();
             services.AddScoped<ISystemTypeRepository, SystemTypeRepository>();
             services.AddScoped<ITenantRepository, TenantRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }

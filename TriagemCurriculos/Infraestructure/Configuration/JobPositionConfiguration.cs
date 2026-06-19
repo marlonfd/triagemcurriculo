@@ -48,10 +48,8 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 
             // Índices
             builder.HasIndex(j => j.TenantId).HasDatabaseName("idx_tenant_job");
-
-            // SEGURANÇA MÁXIMA (Multi-tenancy): Filtro global automático. 
-            // Qualquer consulta a JobPositions vai injetar um "WHERE tenant_id = @tenantId" por baixo dos panos.
-            //builder.HasQueryFilter(j => j.TenantId == _tenantId);
+            
+            builder.HasQueryFilter(j => j.TenantId == _tenantId);
         }
     }
 }

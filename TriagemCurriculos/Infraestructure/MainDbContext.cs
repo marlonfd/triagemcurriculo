@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RecrutamentoIA.Domain.Common;
 using System.Linq.Expressions;
 using System.Reflection;
+using TriagemCurriculos.Domain.Entites;
 using TriagemCurriculos.Infraestructure.Data;
+using TriagemCurriculos.Infraestructure.Interface;
 
 namespace TriagemCurriculos.Infraestructure
 {
@@ -15,44 +17,21 @@ namespace TriagemCurriculos.Infraestructure
             _currentTenantId = tenantProvider.GetTenantId();
         }
 
+        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<SystemType> SystemTypes { get; set; }
+        public DbSet<JobPosition> JobPositions { get; set; }
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // 1. Aplica as configurações normais (tabelas, colunas, índices)
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            // 2. MÁGICA GENÉRICA: Varre todas as classes mapeadas no banco
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                // Verifica se a classe da entidade implementa a interface ITenantEntity
-                if (typeof(ITenantEntity).IsAssignableFrom(entityType.ClrType))
-                {
-                    // Constrói a expressão de filtro dinamicamente: e => e.TenantId == _currentTenantId
-                    var filterExpression = CreateTenantFilterExpression(entityType.ClrType);
-
-                    // Aplica o HasQueryFilter na entidade de forma genérica
-                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filterExpression);
-                }
-            }
-        }
-        // Método auxiliar sênior para construir a expressão LINQ em tempo de execução
-        private LambdaExpression CreateTenantFilterExpression(Type entityType)
-        {
-            // Cria o parâmetro da expressão, ex: (x => ...)
-            var parameter = Expression.Parameter(entityType, "x");
-
-            // Cria o acesso à propriedade, ex: (x.TenantId)
-            var property = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
-
-            // Cria a referência para a variável local do DbContext, ex: (_currentTenantId)
-            var currentTenantIdProperty = Expression.Property(Expression.Constant(this), nameof(_currentTenantId));
-
-            // Cria a comparação de igualdade, ex: (x.TenantId == _currentTenantId)
-            var comparison = Expression.Equal(property, currentTenantIdProperty);
-
-            // Transforma tudo em uma Lambda Expression funcional: x => x.TenantId == _currentTenantId
-            return Expression.Lambda(comparison, parameter);
+            
+            modelBuilder.ApplyConfiguration(new TriagemCurriculos.Infraestructure.Configuration.TenantConfiguration());
+            modelBuilder.ApplyConfiguration(new TriagemCurriculos.Infraestructure.Configuration.JobPositionConfiguration(_currentTenantId));
+            modelBuilder.ApplyConfiguration(new TriagemCurriculos.Infraestructure.Configuration.SystemTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new TriagemCurriculos.Infraestructure.Configuration.CandidateConfiguration(_currentTenantId));
+            modelBuilder.ApplyConfiguration(new TriagemCurriculos.Infraestructure.Configuration.UserConfiguration(_currentTenantId));
         }
     }
 }

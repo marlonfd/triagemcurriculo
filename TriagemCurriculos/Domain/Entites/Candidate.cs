@@ -1,11 +1,11 @@
-﻿using RecrutamentoIA.Domain.Common;
+using RecrutamentoIA.Domain.Common;
 using System.Text.Json;
 
 namespace TriagemCurriculos.Domain.Entites
 {
     public class Candidate:ITenantEntity
     {
-        public int Id { get; private set; }
+        public long Id { get; private set; }
         public string TenantId { get; private set; }
         public long JobPositionId { get; private set; }
         public int StatusTypeId { get; private set; }
