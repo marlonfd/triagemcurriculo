@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TriagemCurriculos.Domain.Entites;
 
@@ -6,14 +6,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 {
     public class JobPositionConfiguration : IEntityTypeConfiguration<JobPosition>
     {
-        private readonly string _tenantId;
-
-        // Injetamos o Tenant atual no construtor da configuração para aplicar o filtro global
-        public JobPositionConfiguration(string tenantId)
-        {
-            _tenantId = tenantId;
-        }
-
         public void Configure(EntityTypeBuilder<JobPosition> builder)
         {
             builder.ToTable("job_positions");
@@ -48,8 +40,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 
             // Índices
             builder.HasIndex(j => j.TenantId).HasDatabaseName("idx_tenant_job");
-            
-            builder.HasQueryFilter(j => j.TenantId == _tenantId);
         }
     }
 }

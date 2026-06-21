@@ -27,8 +27,8 @@
             
             modelBuilder.ApplyConfiguration(new TenantConfiguration());
             modelBuilder.ApplyConfiguration(new SystemTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new JobPositionConfiguration(_currentTenantId));
-            modelBuilder.ApplyConfiguration(new CandidateConfiguration(_currentTenantId));
+            modelBuilder.ApplyConfiguration(new JobPositionConfiguration());
+            modelBuilder.ApplyConfiguration(new CandidateConfiguration());
         }
     }
 }

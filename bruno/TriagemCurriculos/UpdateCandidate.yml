@@ -1,0 +1,25 @@
+info:
+  name: UpdateCandidate
+  type: http
+  seq: 9
+
+http:
+  method: PUT
+  url: "{{urlApi}}/candidates/1"
+  body:
+    type: json
+    data: |-
+      {
+        "JobPositionId": 1,
+        "StatusTypeId": 2,
+        "CandidateName": "Marlon Desenvolvedor",
+        "CandidateEmail": "marlon@teste.com",
+        "ResumeFileUrl": "https://meubucket.s3.com/curriculo_marlon.pdf"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

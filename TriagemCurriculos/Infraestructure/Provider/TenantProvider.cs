@@ -19,6 +19,17 @@ namespace TriagemCurriculos.Infraestructure.Provider
             var context = _httpContextAccessor.HttpContext;
             if (context != null)
             {
+                // Tenta pegar do Token JWT primeiro
+                if (context.User?.Identity?.IsAuthenticated == true)
+                {
+                    var tenantClaim = context.User.FindFirst("tenant_id")?.Value;
+                    if (!string.IsNullOrEmpty(tenantClaim))
+                    {
+                        return tenantClaim;
+                    }
+                }
+
+                // Fallback para o Header (usado no cadastro de tenant/usuário, ou rotas públicas)
                 if (context.Request.Headers.TryGetValue("X-Tenant-Id", out var tenantHeader))
                 {
                     return tenantHeader.ToString();

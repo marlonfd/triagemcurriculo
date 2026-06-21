@@ -1,0 +1,26 @@
+info:
+  name: Register
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{urlApi}}/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        //"TenantId":"ten002",
+        "CompanyName":"Teste de Marlon2",
+        "Name":"MARLON2",
+        "Email":"marlon@gmail.com",
+        "Password":"marlon@123;",
+        "RoleTypeId":1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,6 +1,7 @@
-using TriagemCurriculos.Infraestructure.Data;
 using TriagemCurriculos.Infraestructure.Interface;
 using TriagemCurriculos.Infraestructure.Provider;
+using TriagemCurriculos.Services;
+using TriagemCurriculos.Services.Interface;
 
 namespace TriagemCurriculos.Infraestructure
 {
@@ -10,8 +11,16 @@ namespace TriagemCurriculos.Infraestructure
         {
             services.AddScoped<ITenantProvider, TenantProvider>();
             services.AddScoped<HttpContextService>();
-            services.AddScoped<TriagemCurriculos.Services.Interface.ITokenService, TriagemCurriculos.Services.TokenService>();
-            services.AddScoped<TriagemCurriculos.Services.Interface.IAuthService, TriagemCurriculos.Services.AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IJobPositionService, JobPositionService>();
+            services.AddScoped<ICandidateService, CandidateService>();
+            
+            services.AddScoped<IPdfExtractionService, PdfExtractionService>();
+            services.AddScoped<IAiResumeProcessorService, AiResumeProcessorService>();
+
+            var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] ?? string.Empty;
+            services.AddSingleton(new OpenAI.Chat.ChatClient("gpt-4o-mini", openAiApiKey));
         }
     }
 }

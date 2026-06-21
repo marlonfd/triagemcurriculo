@@ -9,14 +9,13 @@ namespace TriagemCurriculos.Domain.Entites
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool Active { get; set; }
 
         // Propriedades de Navegação do ORM
         public virtual Tenant Tenant { get; private set; }
         public virtual ICollection<Candidate> Candidates { get; private set; } = new List<Candidate>();
 
-        private JobPosition() { }
-
-        public JobPosition(string tenantId, string title, string description)
+        public JobPosition(string tenantId, string title, string description,bool active = false)
         {
             if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("O título da vaga é obrigatório.");
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("A descrição da vaga é obrigatória.");
@@ -25,6 +24,7 @@ namespace TriagemCurriculos.Domain.Entites
             Title = title;
             Description = description;
             CreatedAt = DateTime.UtcNow;
+            Active = active;
         }
 
         public void UpdateDetails(string title, string description)

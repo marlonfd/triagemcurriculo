@@ -5,10 +5,12 @@ using TriagemCurriculos.Repositories.Interface;
 
 namespace TriagemCurriculos.Repositories
 {
-    public class SystemTypeRepository : RepositoryBase<SystemType>, ISystemTypeRepository
+    public class SystemTypeRepository : ISystemTypeRepository
     {
-        public SystemTypeRepository(MainDbContext db) : base(db)
+        private readonly MainDbContext _db;
+        public SystemTypeRepository(MainDbContext db) 
         {
+            _db = db;
         }
     }
 }

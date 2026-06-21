@@ -1,0 +1,25 @@
+info:
+  name: AddCandidate
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{urlApi}}/candidates"
+  body:
+    type: json
+    data: |-
+      {
+        "JobPositionId": 4,
+        "StatusTypeId": 1,
+        "CandidateName": "Marlon Desenvolvedor",
+        "CandidateEmail": "marlon@teste.com",
+        "ResumeFileUrl": "https://meubucket.s3.com/curriculo_marlon.pdf"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

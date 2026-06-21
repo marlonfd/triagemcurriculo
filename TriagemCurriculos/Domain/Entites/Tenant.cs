@@ -17,7 +17,7 @@ namespace TriagemCurriculos.Domain.Entites
         private Tenant() { }
         public Tenant(string id, string companyName, PlanTier planTier = PlanTier.Free)
         {
-            if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("O ID do Tenant é obrigatório.");
+           // if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("O ID do Tenant é obrigatório.");
             if (string.IsNullOrWhiteSpace(companyName)) throw new ArgumentException("O nome da empresa é obrigatório.");
 
             Id = id.ToLower().Trim();

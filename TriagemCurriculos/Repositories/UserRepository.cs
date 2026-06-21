@@ -6,15 +6,17 @@ using TriagemCurriculos.Repositories.Interface;
 
 namespace TriagemCurriculos.Repositories
 {
-    public class UserRepository : RepositoryBase<User>, IUserRepository
+    public class UserRepository : IUserRepository
     {
-        public UserRepository(MainDbContext db) : base(db)
+        private readonly MainDbContext _db;
+        public UserRepository(MainDbContext db)
         {
+            _db = db;
         }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _db.Users.IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task AddAsync(User user)

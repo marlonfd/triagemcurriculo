@@ -1,0 +1,22 @@
+info:
+  name: AddJob
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{urlApi}}/jobs/"
+  body:
+    type: json
+    data: |-
+      {
+        "Title":"Vaga de programadorrrrrrdada",
+        "Description":"Vaga de programador senior C#rrrrrdadsada"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

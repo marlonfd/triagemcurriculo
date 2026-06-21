@@ -6,13 +6,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 {
     public class CandidateConfiguration : IEntityTypeConfiguration<Candidate>
     {
-        private readonly string _tenantId;
-
-        public CandidateConfiguration(string tenantId)
-        {
-            _tenantId = tenantId;
-        }
-
         public void Configure(EntityTypeBuilder<Candidate> builder)
         {
             builder.ToTable("candidates");
@@ -28,7 +21,7 @@ namespace TriagemCurriculos.Infraestructure.Configuration
             builder.Property(c => c.CandidateEmail).HasColumnName("candidate_email").IsRequired().HasMaxLength(150);
 
             // Mapeamento do campo JSON string do banco
-            builder.Property(c => c.ExtractedSkillsJson)
+            builder.Property(c => c.ExtractedSkills)
                 .HasColumnName("extracted_skills")
                 .HasColumnType("json"); // MySQL 8.4
 
@@ -58,9 +51,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 
             builder.HasIndex(c => new { c.TenantId, c.JobPositionId, c.AiMatchScore })
                 .HasDatabaseName("idx_tenant_candidate_search");
-
-            // Filtro global de Multi-tenancy
-            builder.HasQueryFilter(c => c.TenantId == _tenantId);
         }
     }
 }

@@ -12,25 +12,19 @@ namespace TriagemCurriculos.Domain.Entites
         public string CandidateName { get; private set; }
         public string CandidateEmail { get; private set; }
 
-        public string ExtractedSkillsJson { get; private set; }
-
+        public List<string>? ExtractedSkills { get; private set; } = new List<string>();
         public int? AiMatchScore { get; private set; }
-        public string AiAnalysisSummary { get; private set; }
-        public string ResumeFileUrl { get; private set; }
+        public string? AiAnalysisSummary { get; private set; }
+        public string? ResumeFileUrl { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         public virtual Tenant Tenant { get; private set; }
         public virtual JobPosition JobPosition { get; private set; }
         public virtual SystemType StatusType { get; private set; }
 
-        public IReadOnlyCollection<string> ExtractedSkills =>
-            string.IsNullOrEmpty(ExtractedSkillsJson)
-                ? Array.Empty<string>()
-                : JsonSerializer.Deserialize<List<string>>(ExtractedSkillsJson) ?? new List<string>();
-
         private Candidate() { }
 
-        public Candidate(string tenantId, long jobPositionId, int statusTypeId, string candidateName, string candidateEmail, string resumeFileUrl)
+        public Candidate(string tenantId, long jobPositionId, int statusTypeId, string candidateName, string candidateEmail, string? resumeFileUrl)
         {
             TenantId = tenantId;
             JobPositionId = jobPositionId;
@@ -48,7 +42,7 @@ namespace TriagemCurriculos.Domain.Entites
 
             AiMatchScore = score;
             AiAnalysisSummary = summary;
-            ExtractedSkillsJson = JsonSerializer.Serialize(skills);
+            ExtractedSkills = skills ?? new List<string>();
         }
 
         public void UpdateStatus(int newStatusTypeId)

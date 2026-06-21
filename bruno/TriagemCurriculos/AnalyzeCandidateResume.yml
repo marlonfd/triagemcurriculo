@@ -1,0 +1,21 @@
+info:
+  name: AnalyzeCandidateResume
+  type: http
+  seq: 13
+
+http:
+  method: POST
+  url: "{{urlApi}}/candidates/1/analyze"
+  body:
+    type: multipartForm
+    data:
+      - name: file
+        type: file
+        value: []
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

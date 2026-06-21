@@ -6,12 +6,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        private readonly string _tenantId;
-
-        public UserConfiguration(string tenantId)
-        {
-            _tenantId = tenantId;
-        }
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("users");
@@ -69,9 +63,6 @@ namespace TriagemCurriculos.Infraestructure.Configuration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(u => u.TenantId).HasDatabaseName("idx_tenant_user");
-
-            // Filtro global de Multi-tenancy
-            builder.HasQueryFilter(c => c.TenantId == _tenantId);
         }
     }
 }

@@ -1,0 +1,17 @@
+info:
+  name: GetCandidateById
+  type: http
+  seq: 8
+
+http:
+  method: GET
+  url: "{{urlApi}}/candidates/1"
+  body:
+    type: none
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

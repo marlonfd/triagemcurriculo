@@ -9,11 +9,13 @@ namespace TriagemCurriculos.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITenantRepository _tenantRepository;
         private readonly ITokenService _tokenService;
 
-        public AuthService(IUserRepository userRepository, ITokenService tokenService)
+        public AuthService(IUserRepository userRepository, ITenantRepository tenantRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
+            _tenantRepository = tenantRepository;
             _tokenService = tokenService;
         }
 
@@ -46,6 +48,28 @@ namespace TriagemCurriculos.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
         {
+            Tenant? tenant = null;
+
+            if (!string.IsNullOrWhiteSpace(request.TenantId))
+            {
+                tenant = await _tenantRepository.GetByIdAsync(request.TenantId);
+                if (tenant == null)
+                {
+                    throw new ArgumentException("O Tenant informado não existe.");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(request.CompanyName))
+                {
+                    throw new ArgumentException("Para criar um novo Tenant, envie o campo 'companyName'.");
+                }
+                
+                string newTenantId = Guid.NewGuid().ToString();
+                tenant = new Tenant(newTenantId, request.CompanyName);
+                await _tenantRepository.AddAsync(tenant);
+            }
+
             var existingUser = await _userRepository.GetByEmailAsync(request.Email);
             if (existingUser != null)
             {
@@ -55,7 +79,7 @@ namespace TriagemCurriculos.Services
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             var newUser = new User(
-                request.TenantId,
+                tenant.Id,
                 request.Name,
                 request.Email,
                 passwordHash,
